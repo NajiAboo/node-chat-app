@@ -33,12 +33,14 @@ socket.on('locationMessage', function(message){
 
 $('#message-form').on('submit', function(e) {
     e.preventDefault();
+    
+    var messageTextBox = $('[name=message]');
 
     socket.emit('createMessage', {
         from: 'User',
-        text: $('[name=message]').val()
+        text: messageTextBox.val()
     },function(){
-
+        messageTextBox.val('');
     });
 });
 
@@ -48,11 +50,14 @@ $('#message-form').on('submit', function(e) {
  locationButton.on('click', function(){
      if(!navigator.geolocation) 
      {
-         alert('your browser is not supported');
+         return alert('your browser is not supported');
      }
+
+     locationButton.attr('disabled', 'disaled').text('Sending Location ...')
 
      var location = navigator.geolocation.getCurrentPosition(function(location){
          console.log(location);
+         locationButton.removeAttr('disabled').text('Send Location');
          socket.emit('createLocationMessage',{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude
@@ -60,5 +65,6 @@ $('#message-form').on('submit', function(e) {
 
      },function(){
         alert('You have to give permission to get the location');
+        locationButton.removeAttr('disabled').text('Send Location');;
      });
 });
