@@ -25,17 +25,12 @@
         console.log('user disconnected')        ;
     });
 
-    socket.on('createMessage', (crMessage) => {
+    socket.on('createMessage', (crMessage, callback) => {
         console.log('create message');
         console.log(crMessage);
 
         io.emit('newMessage', generateMessage( crMessage.from, crMessage.text));
-
-        // socket.broadcast.emit('newMessage',{
-        //     from: crMessage.from,
-        //     text: crMessage.text,
-        //     createdAt: new Date().getTime()
-        // });
+         callback('received the message');
     }); // create message ends here
 
     

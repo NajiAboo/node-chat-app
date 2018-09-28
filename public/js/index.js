@@ -9,8 +9,9 @@ socket.on('disconnect',function() {
 });
 
 socket.on('newMessage', function (newMsg) {
-    console.log('New Message');
-    console.log(newMsg);
+    var li = $("<li></li>");
+    li.text(`${newMsg.from}: ${newMsg.text}`);
+    $("ol").append(li);
 });
 
 socket.on('welcomeMsg', function(msg) {
@@ -19,4 +20,16 @@ socket.on('welcomeMsg', function(msg) {
 
 socket.on('newJoinee',function(msg) {
     console.log(msg);
+});
+
+
+$('#message-form').on('submit', function(e) {
+    e.preventDefault();
+
+    socket.emit('createMessage', {
+        from: 'User',
+        text: $('[name=message]').val()
+    },function(){
+
+    });
 });
