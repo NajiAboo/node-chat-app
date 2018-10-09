@@ -3,6 +3,7 @@
  const path = require('path');
  const socketIO = require('socket.io');
  const  {generateMessage,generateLocationMessage} = require('./utils/message');
+ const {isRealString} = require('./utils/validation');
 
 
  const publicPath = path.join(__dirname, '../public');
@@ -37,6 +38,17 @@
         io.emit('locationMessage', 
                 generateLocationMessage('Admin',coords.latitude,coords.longitude));
     });
+
+    //join the room 
+    socket.on('join',(params,callback)=>{
+      
+      if (!isRealString(params.name) && !(isRealString(params.room))) {
+        callback('Name and Room is required');
+      }
+      console.log(params);
+      callback();
+    });
+
 
   });
 

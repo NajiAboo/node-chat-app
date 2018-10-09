@@ -10,20 +10,24 @@ function scrollToBottom() {
     var newMessageHeight = newMessage.innerHeight();
     var lastMessageHeight = newMessage.prev().innerHeight();
 
-    // console.log("clientHeight", clientHeight);
-    // console.log("scrollTop", scrollTop);
-    // console.log("scrollHeight", scrollHeight);
-    // console.log("newMessageHeight", newMessageHeight);
-    // console.log("lastMessageHeight", lastMessageHeight);
-
     if ( clientHeight+ scrollTop+ newMessageHeight+ lastMessageHeight >= scrollHeight) {
-        console.log('sunn');
         messages.scrollTop(scrollHeight);
     }
 }
 
 socket.on('connect', function()  {
-    console.log('connected to server');
+     // Get the params from the url 
+     var params = jQuery.deparam(window.location.search);
+
+     // emit event to join the server
+     socket.emit('join', params, function(err){
+        if (err) {
+            window.location.href="/";
+        }else {
+            console.log('Success!');
+        }
+     });
+      
 });
 
 socket.on('disconnect',function() {
